@@ -7,6 +7,9 @@ import com.spring.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,8 +27,9 @@ public class BoardController {
      * 게시글 전체 조회
      * */
     @GetMapping
-    public String postList(Model model) {
-        model.addAttribute("list", boardService.findAll());
+    public String postList(Model model,
+                           @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5) Pageable pageable) {
+        model.addAttribute("resultMap", boardService.findAll(pageable));
         return "board/postList";
     }
 
